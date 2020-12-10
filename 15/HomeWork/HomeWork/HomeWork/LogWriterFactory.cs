@@ -6,29 +6,34 @@ namespace HomeWork
 {
     class LogWriterFactory
     {
-        private static LogWriterFactory instance;
+        private static LogWriterFactory _instance;
 
-        private LogWriterFactory()
+        private LogWriterFactory() { }
+
+        public static LogWriterFactory GetInstance()
         {
+            if (_instance == null)
+                _instance = new LogWriterFactory();
 
+            return _instance;
         }
 
 
- 
-
-          public static ILogWriter GetLogWriter<T>(object parameters) where T : ILogWriter
+        public ILogWriter GetLogWriter<T>(object parameters) where T : ILogWriter
         {
-            if (instance == null)
-                 instance = new LogWriterFactory();
+            if (typeof(T) == typeof(ConsoleLogWriter)) { return new ConsoleLogWriter(); }
+            if (typeof(T) == typeof(FileLogWriter)) { return new FileLogWriter((string)parameters); }
+            if (typeof(T) == typeof(MultipleLogWriter)) { return new MultipleLogWriter(ConsoleLog, FileLog); }
 
-            ConsoleLogWriter ConsoleLog = new ConsoleLogWriter();
-            FileLogWriter FileLog = new FileLogWriter((string)parameters);
-            MultipleLogWriter MultipleLog = new MultipleLogWriter(new List<ILogWriter> { ConsoleLog, FileLog });
 
-            return MultipleLog;
+             
+            //     instance = new LogWriterFactory();
 
- 
-         }
+            //ConsoleLogWriter ConsoleLog = new ConsoleLogWriter();
+            //FileLogWriter FileLog = new FileLogWriter((string)parameters);
+            //MultipleLogWriter MultipleLog = new MultipleLogWriter(new List<ILogWriter> { ConsoleLog, FileLog });
+
+        }
 
     }
 }

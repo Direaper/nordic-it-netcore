@@ -7,13 +7,10 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            var factory = LogWriterFactory.GetInstance();
 
-            var consoleLogWriter = factory.GetLogWriter<ConsoleLogWriter>(parameters: null);
-            var fileLogWriter = factory.GetLogWriter<FileLogWriter>(parameters: @"C:\Users\jimac\Desktop\log.txt");
-            var multiLogWriter = factory.GetLogWriter<FileLogWriter>(parameters: new[] { consoleLogWriter, fileLogWriter });
-
-            multiLogWriter.LogError(message: "Error!");
+            var test = LogWriterFactory.GetLogWriter<ILogWriter>(@"C:\Users\jimac\Desktop\log.txt");
+            
+            test.LogError("error!");
 
 
             //var clw = new ConsoleLogWriter();

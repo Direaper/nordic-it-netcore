@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 
 namespace HomeWork
 {
     class MultipleLogWriter : AbstractLogWriter
     {
-       private readonly List<ILogWriter> _logWriters;
-        public MultipleLogWriter(IEnumerable<ILogWriter> logWriters)
+        IList<ILogWriter> _logWriters;
+        public MultipleLogWriter(IList<ILogWriter> logWriters)
         {
-            _logWriters = logWriters.ToList();
+            _logWriters = logWriters;
         }
 
         public override void LogSingleRecord(LogMessageType logMessageType, string message)
@@ -24,7 +23,8 @@ namespace HomeWork
         {
             foreach (var logWriter in _logWriters)
             {
-                    logWriter?.Dispose();
+                if (logWriter != null)
+                    logWriter.Dispose();
             }
         }
 
