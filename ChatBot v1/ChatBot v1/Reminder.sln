@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.Core", "Reminder.Storage.Core\Reminder.Storage.Core.csproj", "{8CD5906F-89E6-484C-A6FB-E00BA9948942}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Storage.Core", "Reminder.Storage.Core\Reminder.Storage.Core.csproj", "{8CD5906F-89E6-484C-A6FB-E00BA9948942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.InMemory", "Reminder.Storage.InMemory\Reminder.Storage.InMemory.csproj", "{57E0872A-CD39-46F8-B5F9-191724E2183A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Storage.InMemory", "Reminder.Storage.InMemory\Reminder.Storage.InMemory.csproj", "{57E0872A-CD39-46F8-B5F9-191724E2183A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.TestApp", "Reminder.TestApp\Reminder.TestApp.csproj", "{2DC16D1B-55E5-4966-BD46-242F521D9055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.TestApp", "Reminder.TestApp\Reminder.TestApp.csproj", "{2DC16D1B-55E5-4966-BD46-242F521D9055}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.Core.Tests", "Reminder.Storage.Core.Tests\Reminder.Storage.Core.Tests.csproj", "{B4B8855D-7F1C-414F-A8D3-39484908CEE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Storage.Core.Tests", "Reminder.Storage.Core.Tests\Reminder.Storage.Core.Tests.csproj", "{B4B8855D-7F1C-414F-A8D3-39484908CEE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Storage.InMemory.Tests", "Reminder.Storage.InMemory.Tests\Reminder.Storage.InMemory.Tests.csproj", "{748C4B54-BE5F-4658-9DAA-61C35A71A0F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Storage.InMemory.Tests", "Reminder.Storage.InMemory.Tests\Reminder.Storage.InMemory.Tests.csproj", "{748C4B54-BE5F-4658-9DAA-61C35A71A0F9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reminder.Domain", "Storage.Domain.Reminder.Domain\Reminder.Domain.csproj", "{A0CE6F5E-0277-4795-9942-49332696D502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.Domain.Tests", "Reminder.Domain.Tests\Reminder.Domain.Tests.csproj", "{8175E9A6-4487-4AF8-837E-41B9F3061F13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{748C4B54-BE5F-4658-9DAA-61C35A71A0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{748C4B54-BE5F-4658-9DAA-61C35A71A0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{748C4B54-BE5F-4658-9DAA-61C35A71A0F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CE6F5E-0277-4795-9942-49332696D502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CE6F5E-0277-4795-9942-49332696D502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CE6F5E-0277-4795-9942-49332696D502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CE6F5E-0277-4795-9942-49332696D502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8175E9A6-4487-4AF8-837E-41B9F3061F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8175E9A6-4487-4AF8-837E-41B9F3061F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8175E9A6-4487-4AF8-837E-41B9F3061F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8175E9A6-4487-4AF8-837E-41B9F3061F13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
