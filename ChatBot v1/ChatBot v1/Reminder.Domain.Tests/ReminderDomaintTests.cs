@@ -14,7 +14,7 @@ namespace Reminder.Domain.Tests
         public void Awaiting_Item_Changes_Status_to_ReadyToSend_After_Checking_Period()
         {
             var storage = new InMemoryReminderStorage();
-            using var domain = new ReminderDomain(storage, TimeSpan.FromMilliseconds(50));
+            using var domain = new ReminderDomain(storage, TimeSpan.FromMilliseconds(50), TimeSpan.FromSeconds(1));
 
             var item = new ReminderItem(
                    DateTimeOffset.Now,

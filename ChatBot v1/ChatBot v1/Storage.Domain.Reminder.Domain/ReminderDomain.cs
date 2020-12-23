@@ -5,14 +5,21 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Net.Http;
+using Reminder.Sender.Core;
+using Reminder.Receiver.Core;
+using Reminder.Parsing;
 
 namespace Reminder.Domain
 {
     public class ReminderDomain : IDisposable
     {
         private readonly IReminderStorage _storage;
+        private readonly IReminderSender _sender;
+        private readonly IReminderReceiver _receiver;
+
         private readonly TimeSpan _awaitingRemindersCheckPeriod;
         private readonly TimeSpan _readyRemindersSendPeriod;
+
 
         private Timer _awaitingRemindersCheckTimer;
         private Timer _readyRemindersSendTimer;
@@ -20,26 +27,41 @@ namespace Reminder.Domain
         public event EventHandler<SendingSucceededEventArgs> SendingSucceeded;
         public event EventHandler<SendingFailedEventArgs> SendingFailed;
 
-        public Action<SendReminderModel> SendReminder { get; set; }
+        public event EventHandler<ParsingFailedEventArgs> ParsingFailed;
 
-        public ReminderDomain(IReminderStorage storage)
-            : this(storage,
+        public event EventHandler<AddingSucceededEventArgs> AddingSucceeded;
+        public event EventHandler<AddingFailedEventArgs> AddingFailed;
+
+        public ReminderDomain(
+            IReminderStorage storage,
+            IReminderReceiver receiver,
+            IReminderSender sender)
+            : this(
+                  storage,
+                  receiver,
+                  sender,
                   TimeSpan.FromMinutes(1),
                   TimeSpan.FromMinutes(1))
         { }
         public ReminderDomain(
             IReminderStorage storage,
+            IReminderReceiver receiver,
+            IReminderSender sender,
             TimeSpan awaitingRemindersCheckingPeriod,
             TimeSpan readyRemindersSendPeriod)
         {
             _storage = storage;
+            _receiver = receiver;
+            _sender = sender;
             _awaitingRemindersCheckPeriod = awaitingRemindersCheckingPeriod;
             _readyRemindersSendPeriod = readyRemindersSendPeriod;
         }
-        public void AddReminder(AddReminderModel addReminderModel)
-        {
-            _storage.Add(addReminderModel.ToRemiderItem());
-        }
+        //public void AddReminder(AddReminderModel addReminderModel)
+        //{
+        //    _storage.Add(addReminderModel.ToRemiderItem());
+        //}
+
+
 
         public void Run()
         {
@@ -54,6 +76,40 @@ namespace Reminder.Domain
              null,
              TimeSpan.Zero,
              _readyRemindersSendPeriod);
+
+            _receiver.MessageReceived += ReceiverOnMessageReceived;
+
+            _receiver.StartReceiving();
+        }
+
+        private void ReceiverOnMessageReceived(
+             object sender, MessageReceivedEventArgs e)
+        {
+            var o = MessageParser.Parse(e.Message);
+            if (o == null)
+            {
+                ParsingFailed?.Invoke(
+                    this,
+                    new ParsingFailedEventArgs(e.ContactId, e.Message));
+                return;
+            }
+
+            var item = new ReminderItem(o.Date, o.Message, e.ContactId);
+
+            try
+            {
+                _storage.Add(item);
+
+                AddingSucceeded?.Invoke(
+                    this,
+                    new AddingSucceededEventArgs(new AddReminderModel(item)));
+            }
+            catch (Exception exception)
+            {
+                AddingFailed?.Invoke(
+                    this,
+                    new AddingFailedEventArgs(new AddReminderModel(item), exception));  
+            }
         }
 
         private void CheckAwaitingReminders(object _)
@@ -83,7 +139,10 @@ namespace Reminder.Domain
                 {
                     //попытка послать уведомление
 
-                    SendReminder?.Invoke(sendingModel);
+                    //SendReminder?.Invoke(sendingModel);
+                    _sender.Send(
+                        sendingModel.ContactId,
+                        sendingModel.Message);
 
                     readyItem.Status = ReminderItemStatus.SuccessfullySent;
 

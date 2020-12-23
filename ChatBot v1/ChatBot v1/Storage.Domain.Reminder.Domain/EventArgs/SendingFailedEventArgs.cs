@@ -5,15 +5,18 @@ using System.Text;
 
 namespace Reminder.Domain.EventArgs
 {
-   public class SendingFailedEventArgs: System.EventArgs
-    {
-        public SendReminderModel Reminder { get; set; }
-        public Exception RaisedException { get; set; }
+	public class SendingFailedEventArgs : System.EventArgs
+	{
+		public SendReminderModel Reminder { get; set; }
 
-        public SendingFailedEventArgs(SendReminderModel reminder, Exception exception)
-        {
-            Reminder = reminder;
-            RaisedException = exception;
-        }
-    }
+		public Exception Exception { get; set; }
+
+		public SendingFailedEventArgs(
+			SendReminderModel reminder,
+			Exception exception)
+		{
+			Reminder = reminder;
+			Exception = exception;
+		}
+	}
 }
