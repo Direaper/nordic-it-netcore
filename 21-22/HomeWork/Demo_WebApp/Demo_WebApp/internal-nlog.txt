@@ -1,0 +1,15 @@
+2021-01-31 21:58:08.7756 Info Message Template Auto Format enabled
+2021-01-31 21:58:08.8094 Info Loading assembly: NLog.Web.AspNetCore
+2021-01-31 21:58:08.8999 Info Adding target FileTarget(Name=allfile)
+2021-01-31 21:58:08.8999 Info Adding target FileTarget(Name=ownFile-web)
+2021-01-31 21:58:08.9568 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=C:\Users\jimac\Desktop\nordic-it-netcore\21-22\HomeWork\Demo_WebApp\Demo_WebApp\bin\Debug\netcoreapp3.1\nlog.config
+2021-01-31 22:07:57.4292 Info Message Template Auto Format enabled
+2021-01-31 22:07:57.4496 Info Loading assembly: NLog.Web.AspNetCore
+2021-01-31 22:07:57.5470 Info Adding target FileTarget(Name=allfile)
+2021-01-31 22:07:57.5615 Info Adding target FileTarget(Name=ownFile-web)
+2021-01-31 22:07:57.6330 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=C:\Users\jimac\Desktop\nordic-it-netcore\21-22\HomeWork\Demo_WebApp\Demo_WebApp\bin\Debug\netcoreapp3.1\nlog.config
+2021-01-31 22:10:54.5941 Info Message Template Auto Format enabled
+2021-01-31 22:10:54.6260 Info Loading assembly: NLog.Web.AspNetCore
+2021-01-31 22:10:54.7227 Info Adding target FileTarget(Name=allfile)
+2021-01-31 22:10:54.7364 Info Adding target FileTarget(Name=ownFile-web)
+2021-01-31 22:10:54.7877 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=C:\Users\jimac\Desktop\nordic-it-netcore\21-22\HomeWork\Demo_WebApp\Demo_WebApp\bin\Debug\netcoreapp3.1\nlog.config
