@@ -18,12 +18,12 @@ namespace Reminder.Storage.WebApi.Client
 
         public ReminderStorageWebApiClient(string baseWebApiUrl)
         {
-            if(baseWebApiUrl == null)
+            if (baseWebApiUrl == null)
             {
                 throw new ArgumentNullException(
                     nameof(baseWebApiUrl));
 
-                _baseWebApiUrl = baseWebApiUrl.TrimEnd('/')+'/';
+                _baseWebApiUrl = baseWebApiUrl.TrimEnd('/') + '/';
                 _httpClient = new HttpClient();
             }
 
@@ -31,36 +31,41 @@ namespace Reminder.Storage.WebApi.Client
         }
         public void Add(ReminderItem reminderItem)
         {
+            HttpResponseMessage response = CallWebApi(
+           HttpMethod.Post,
+           string.Empty,
+           new ReminderItemAddModel(reminderItem));
 
-            // prepare URL
-            string relativeUrl = string.Empty;
+            //// prepare URL
+            //string relativeUrl = string.Empty;
 
-            //prepare request
-            var request = new HttpRequestMessage(
-                HttpMethod.Post, _baseWebApiUrl + relativeUrl);
+            ////prepare request
+            //var request = new HttpRequestMessage(
+            //    HttpMethod.Post, _baseWebApiUrl + relativeUrl);
 
-            //add headers
-            request.Headers.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("*/*"));
+            ////add headers
+            //request.Headers.Accept.Add(
+            //    new MediaTypeWithQualityHeaderValue("*/*"));
 
-            //prepare model
-            var model = new ReminderItemAddModel(reminderItem);
+            ////prepare model
+            //var model = new ReminderItemAddModel(reminderItem);
 
-            //prepare Request BODY
-            var content = JsonConvert.SerializeObject(model);
-            request.Content = new StringContent(
-                content,
-                Encoding.UTF8,
-                "application/json");
+            ////prepare Request BODY
+            //var content = JsonConvert.SerializeObject(model);
+            //request.Content = new StringContent(
+            //    content,
+            //    Encoding.UTF8,
+            //    "application/json");
 
-            //send Request and get REsponse
-            HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
+            ////send Request and get REsponse
+            //HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
 
+
+            
+            //if (response.StatusCode == HttpStatusCode.NotFound)
+            //    throw CreateException(response);
 
             // check rESPONSE STATUS CODES
-            if (response.StatusCode == HttpStatusCode.NotFound)
-                throw CreateException(response);
-
             if (response.StatusCode != HttpStatusCode.Created)
                 throw CreateException(response);
 
@@ -68,27 +73,43 @@ namespace Reminder.Storage.WebApi.Client
             //parse response model
             //return the result
 
-         
+
+        }
+
+        public void Update(ReminderItem reminderItem)
+        {
+            HttpResponseMessage response = CallWebApi(
+               HttpMethod.Put,
+               reminderItem.Id.ToString(),
+               new ReminderItemUpdateModel(reminderItem));
+
+            // check rESPONSE STATUS CODES
+            if (response.StatusCode != HttpStatusCode.NoContent)
+                throw CreateException(response); 
         }
 
         public ReminderItem Get(Guid id)
         {
-            // prepare URL
-            string relativeUrl = id.ToString();
+            HttpResponseMessage response = CallWebApi(
+                HttpMethod.Get,
+                id.ToString());
 
-            //prepare request
-            var request = new HttpRequestMessage(
-                HttpMethod.Get, _baseWebApiUrl + relativeUrl);
+            //// prepare URL
+            //string relativeUrl = id.ToString();
 
-            //add headers
-            request.Headers.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("*/*"));
+            ////prepare request
+            //var request = new HttpRequestMessage(
+            //    HttpMethod.Get, _baseWebApiUrl + relativeUrl);
 
-            //prepare model
-            //prepare Request BODY
+            ////add headers
+            //request.Headers.Accept.Add(
+            //    new MediaTypeWithQualityHeaderValue("*/*"));
 
-            //send Request and get REsponse
-            HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
+            ////prepare model
+            ////prepare Request BODY
+
+            ////send Request and get REsponse
+            //HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
 
             // check rESPONSE STATUS CODES
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -99,28 +120,35 @@ namespace Reminder.Storage.WebApi.Client
 
             //read response body
             var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            //parse response model
             ReminderItemGetModel model =
              JsonConvert.DeserializeObject<ReminderItemGetModel>(content);
 
             if (model == null)
                 throw new Exception("Bodu cannot be parsed as ReminderItemGetModel. ");
 
+            //return the result
             return model.ToReminderItem();
         }
 
         public List<ReminderItem> GetList(IEnumerable<ReminderItemStatus> statuses, int count = -1, int startPosition = 0)
         {
-            const string relativeUrl = "";
+            HttpResponseMessage response = CallWebApi(
+           HttpMethod.Get,
+           string.Empty);
 
-            var request = new HttpRequestMessage(
-                HttpMethod.Get, _baseWebApiUrl + relativeUrl);
+            //const string relativeUrl = "";
 
-            request.Headers.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("*/*"));
+            //var request = new HttpRequestMessage(
+            //    HttpMethod.Get, _baseWebApiUrl + relativeUrl);
 
-            HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
+            //request.Headers.Accept.Add(
+            //    new MediaTypeWithQualityHeaderValue("*/*"));
 
-            if(response.StatusCode != HttpStatusCode.OK) 
+            //HttpResponseMessage response = _httpClient.SendAsync(request).GetAwaiter().GetResult();
+
+            if (response.StatusCode != HttpStatusCode.OK)
                 throw CreateException(response);
 
             var content = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -135,6 +163,7 @@ namespace Reminder.Storage.WebApi.Client
                 .ToList();
         }
 
+
         private Exception CreateException(HttpResponseMessage response)
         {
             return new Exception(
@@ -142,9 +171,31 @@ namespace Reminder.Storage.WebApi.Client
                 $"Conent:\n{response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
         }
 
-        public void Update(ReminderItem reminderItem)
+        private HttpResponseMessage CallWebApi(
+          HttpMethod httpMethod,
+          string relativeUrl,
+          object model = null)
         {
-            throw new NotImplementedException();
+
+
+            var request = new HttpRequestMessage(
+              httpMethod, _baseWebApiUrl + relativeUrl);
+
+            request.Headers.Accept.Add(
+              new MediaTypeWithQualityHeaderValue("*/*"));
+
+            if (model != null)
+            {
+                string content = JsonConvert.SerializeObject(model);
+                request.Content = new StringContent(
+                    content,
+                    Encoding.UTF8,
+                    "application/json");
+            }
+
+
+            return _httpClient.SendAsync(request).GetAwaiter().GetResult();
         }
+ 
     }
 }

@@ -64,7 +64,10 @@ namespace Reminder.Storage.WebApi.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] ReminderItemAddModel model)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             ReminderItem reminderItem = new ReminderItem(
                 model.Date,
@@ -72,16 +75,31 @@ namespace Reminder.Storage.WebApi.Controllers
                 model.ContactId,
                 model.Status);
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _storage.Add(reminderItem);
             return CreatedAtAction(
                 nameof(Get),
                 new { id = reminderItem.Id },
                 new ReminderItemGetModel(reminderItem));
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] ReminderItemUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ReminderItem reminderItem = _storage.Get(id);
+            if (reminderItem == null)
+            {
+                return NotFound();
+            }
+            
+            model.UpdateRemiderItem(reminderItem);
+            _storage.Update(reminderItem);
+
+            return NoContent();
         }
     }
 }
