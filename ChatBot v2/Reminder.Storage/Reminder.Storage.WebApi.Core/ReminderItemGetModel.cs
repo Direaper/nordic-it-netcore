@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Reminder.Storage.WebApi.Models
+namespace Reminder.Storage.WebApi.Core
 {
     public class ReminderItemGetModel
     {
@@ -40,6 +40,16 @@ namespace Reminder.Storage.WebApi.Models
             Message = reminderItem.Message;
             Date = reminderItem.Date;
             Status = reminderItem.Status;
+        }
+
+        public ReminderItem ToReminderItem()
+        {
+            return new ReminderItem(
+                Id,
+                Date,
+                Message,
+                ContactId,
+                Status);
         }
     }
 }

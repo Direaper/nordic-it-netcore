@@ -28,7 +28,16 @@ namespace Reminder.Storage.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IReminderStorage>(new InMemoryReminderStorage());
+
+            var storage = new InMemoryReminderStorage();
+            // todo: clean up
+            //storage.Add(
+            //    new ReminderItem(
+            //        DateTimeOffset.Now,
+            //        "test message",
+            //        "XYZ0001",
+            //        ReminderItemStatus.ReadyToSend));
+            services.AddSingleton<IReminderStorage>(storage);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

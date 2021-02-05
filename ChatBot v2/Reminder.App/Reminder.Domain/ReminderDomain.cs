@@ -87,7 +87,7 @@ namespace Reminder.Domain
 				return;
 			}
 
-			var item = new ReminderItem(o.Date, o.Message, e.ContactId);
+			var item = new ReminderItem(o.Date, o.Message, e.ContactId, ReminderItemStatus.Awaiting);
 
 			try
 			{

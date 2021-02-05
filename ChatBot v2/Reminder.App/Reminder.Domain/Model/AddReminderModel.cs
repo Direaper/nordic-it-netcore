@@ -13,6 +13,8 @@ namespace Reminder.Domain.Model
 
 		public string Message { get; set; }
 
+		public ReminderItemStatus Status  { get; set; }
+
 		public AddReminderModel()
 		{
 		}
@@ -22,13 +24,15 @@ namespace Reminder.Domain.Model
 			Date = reminderItem.Date;
 			Message = reminderItem.Message;
 			ContactId = reminderItem.ContactId;
+			Status = reminderItem.Status;
 		}
 
-		public AddReminderModel(DateTimeOffset date, string message, string contactId)
+		public AddReminderModel(DateTimeOffset date, string message, string contactId, ReminderItemStatus status)
 		{
 			Date = date;
 			Message = message;
 			ContactId = contactId;
+			Status = status;
 		}
 
 		public ReminderItem ToReminderItem()
@@ -36,7 +40,8 @@ namespace Reminder.Domain.Model
 			return new ReminderItem(
 				Date,
 				Message,
-				ContactId);
+				ContactId,
+				Status);
 		}
 	}
 }

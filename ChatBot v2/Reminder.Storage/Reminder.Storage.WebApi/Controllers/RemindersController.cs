@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Reminder.Storage.Core;
 using Reminder.Storage.InMemory;
-using Reminder.Storage.WebApi.Models;
+using Reminder.Storage.WebApi.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +38,9 @@ namespace Reminder.Storage.WebApi.Controllers
                 ReminderItemStatus.SuccessfullySent
             });
 
-         List<ReminderItemGetModel> result = reminderItems
-                .Select(ri => new ReminderItemGetModel(ri))
-                .ToList();
+            List<ReminderItemGetModel> result = reminderItems
+                   .Select(ri => new ReminderItemGetModel(ri))
+                   .ToList();
 
             return Ok(result);
         }
@@ -50,15 +50,19 @@ namespace Reminder.Storage.WebApi.Controllers
         {
 
             ReminderItem reminderItem = _storage.Get(id);
-            var model = new ReminderItemGetModel(reminderItem);
+            if (reminderItem == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(result);
+            var model = new ReminderItemGetModel(reminderItem);
+            return Ok(model);
         }
 
 
 
         [HttpPost]
-        public IActionResult Add([FromBody]ReminderItemAddModel model)
+        public IActionResult Add([FromBody] ReminderItemAddModel model)
         {
 
 
@@ -68,8 +72,16 @@ namespace Reminder.Storage.WebApi.Controllers
                 model.ContactId,
                 model.Status);
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _storage.Add(reminderItem);
-            return Created();
+            return CreatedAtAction(
+                nameof(Get),
+                new { id = reminderItem.Id },
+                new ReminderItemGetModel(reminderItem));
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Reminder.App
 			const string token = "633428988:AAHLW_LaS7A47PDO2I8sbLkIIM9L0joPOSQ";
 
 			var storage = new InMemoryReminderStorage();
+			//var storage = new ReminderStorageWebApiClient("URL");
 			var sender = new TelegramReminderSender(token);
 			var receiver = new TelegramReminderReceiver(token);
 
