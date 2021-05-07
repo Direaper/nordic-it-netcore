@@ -23,7 +23,8 @@ namespace Reminder.Storage.Core.Tests
 			testItem = new ReminderItem(
 				DateTimeOffset.MinValue,
 				null,
-				null);
+				null,
+				ReminderItemStatus.Awaiting);
 
 			// checking the results
 
@@ -31,7 +32,12 @@ namespace Reminder.Storage.Core.Tests
 		}
 
 		[TestMethod]
-		public void Constructor_Initializes_Status_With_Awaiting()
+		[DataRow(ReminderItemStatus.Awaiting)]
+		[DataRow(ReminderItemStatus.Failed)]
+		[DataRow(ReminderItemStatus.ReadyToSend)]
+		[DataRow(ReminderItemStatus.SuccessfullySent)]
+		public void Constructor_Initializes_Status_With_Status_From_Parameter(
+			ReminderItemStatus status)
 		{
 			// preparing data
 			// test run
@@ -39,11 +45,12 @@ namespace Reminder.Storage.Core.Tests
 			var item = new ReminderItem(
 				DateTimeOffset.MinValue,
 				null,
-				null);
+				null,
+				status);
 
 			// checking the results
 
-			Assert.AreEqual(ReminderItemStatus.Awaiting, item.Status);
+			Assert.AreEqual(status, item.Status);
 		}
 
 		[TestMethod]
@@ -57,7 +64,12 @@ namespace Reminder.Storage.Core.Tests
 
 			// test run
 
-			var item = new ReminderItem(id, date,message,contactId);
+			var item = new ReminderItem(
+				id,
+				date,
+				message,
+				contactId,
+				ReminderItemStatus.Awaiting);
 
 			// checking the results
 
@@ -65,6 +77,7 @@ namespace Reminder.Storage.Core.Tests
 			Assert.AreEqual(date, item.Date);
 			Assert.AreEqual(message, item.Message);
 			Assert.AreEqual(contactId, item.ContactId);
+			Assert.AreEqual(ReminderItemStatus.Awaiting, item.Status);
 		}
 
 		[DataTestMethod]
@@ -79,7 +92,7 @@ namespace Reminder.Storage.Core.Tests
 
 			// test run
 
-			var item = new ReminderItem(date, null, null);
+			var item = new ReminderItem(date, null, null, ReminderItemStatus.Awaiting);
 
 			// checking the results
 			

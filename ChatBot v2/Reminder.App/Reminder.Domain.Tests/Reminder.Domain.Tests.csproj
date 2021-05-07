@@ -19,7 +19,10 @@
 
   <ItemGroup>
     <Reference Include="Reminder.Storage.Core">
-      <HintPath>..\..\Reminder.Storage\Reminder.Storage.Core\bin\Debug\netstandard2.1\Reminder.Storage.Core.dll</HintPath>
+      <HintPath>..\..\Reminder.Storage\Reminder.Storage.InMemory\bin\Debug\netstandard2.1\Reminder.Storage.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Reminder.Storage.InMemory">
+      <HintPath>..\..\Reminder.Storage\Reminder.Storage.InMemory\bin\Debug\netstandard2.1\Reminder.Storage.InMemory.dll</HintPath>
     </Reference>
   </ItemGroup>
 
